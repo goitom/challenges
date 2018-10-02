@@ -6,9 +6,7 @@ import itertools
 import random
 
 from data import DICTIONARY, LETTER_SCORES, POUCH
-
 NUM_LETTERS = 7
-
 
 def draw_letters():
     """Pick NUM_LETTERS letters randomly. Hint: use stdlib random"""
@@ -54,19 +52,34 @@ def calc_word_value(word):
 def get_possible_dict_words(draw):
     """Get all possible words from draw which are valid dictionary words.
     Use the _get_permutations_draw helper and DICTIONARY constant"""
-    pass
+    list_of_permutations = _get_permutations_draw(draw)
+    possible_dict_words = []
+    for perm in list_of_permutations:
+        if perm.lower() in DICTIONARY:
+            possible_dict_words.append(perm)
+    return possible_dict_words
 
 
 def _get_permutations_draw(draw):
     """Helper for get_possible_dict_words to get all permutations of draw letters.
     Hint: use itertools.permutations"""
-    print(itertools.permutations(draw))
+    permutations = []
+    for i in range(NUM_LETTERS):
+        permutations_input = tuple(itertools.permutations(draw, i))
+        for perm in permutations_input:
+            perm = "".join(perm)
+            permutations.append(perm)
+    return permutations
 
 
 # From challenge 01:
 def max_word_value(words):
     """Calc the max value of a collection of words"""
-    return max(words, key=calc_word_value)
+    value_list = []
+    for word in words:
+        value_list.append(calc_word_value(word))
+    max_value = max(value_list)
+    return words[value_list.index(max_value)]
 
 
 def main():
@@ -79,13 +92,12 @@ def main():
     print('Word chosen: {} (value: {})'.format(word, word_score))
 
     possible_words = get_possible_dict_words(draw)
-
     max_word = max_word_value(possible_words)
     max_word_score = calc_word_value(max_word)
     print('Optimal word possible: {} (value: {})'.format(
         max_word, max_word_score))
 
-    game_score = word_score / max_word_score * 100
+    game_score = float(word_score) / max_word_score * 100
     print('You scored: {:.1f}'.format(game_score))
 
 
