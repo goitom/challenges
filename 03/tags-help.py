@@ -33,12 +33,11 @@ def get_similarities(tags):
     Hint 2: use SequenceMatcher (imported) to calculate the similarity ratio
     Bonus: for performance gain compare the first char of each tag in pair and continue if not the same"""
     cartesian_prod = [item for item in product(tags, tags)]
-    print(type(cartesian_prod[0][0][0]))
     similarity_list = []
     similarity_dict = {}
     for prod in cartesian_prod:
         if prod[0][0] == prod[1][0]:
-            s = SequenceMatcher(prod[0], prod[1])
+            s = SequenceMatcher(None, prod[0], prod[1])
             if s.ratio()>SIMILAR:
                 similarity_list.append(prod)
                 similarity_dict[prod] = s.ratio()
